@@ -19,3 +19,4 @@ python3 server.py
 
 Scoring is displayed above the canvas. Each time a projectile hits the
 opposing tank, the firing player earns a point.
+

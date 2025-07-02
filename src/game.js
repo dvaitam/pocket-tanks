@@ -14,6 +14,7 @@ function updateScoreboard() {
     score2El.textContent = score2;
 }
 
+
 // generate random terrain
 const terrain = new Array(canvas.width);
 let h = canvas.height - 50;
@@ -46,6 +47,7 @@ class Tank {
         return px >= this.x - 15 && px <= this.x + 15 &&
                py >= this.y - 16 && py <= this.y;
     }
+
 
     draw() {
         ctx.save();
