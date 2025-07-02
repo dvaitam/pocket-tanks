@@ -2,11 +2,27 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 const GRAVITY = 0.25;
+const angleControl = document.getElementById('angleControl');
+
+// generate random terrain
+const terrain = new Array(canvas.width);
+let h = canvas.height - 50;
+for (let x = 0; x < canvas.width; x++) {
+    h += (Math.random() - 0.5) * 4;
+    h = Math.max(canvas.height / 2, Math.min(canvas.height - 30, h));
+    terrain[x] = h;
+}
+
+function terrainHeight(x) {
+    x = Math.floor(Math.max(0, Math.min(canvas.width - 1, x)));
+    return terrain[x];
+}
+
 
 class Tank {
     constructor(x, color) {
         this.x = x;
-        this.y = canvas.height - 20;
+        this.y = terrainHeight(x) - 20;
         this.angle = Math.PI / 4;
         this.power = 15;
         this.color = color;
@@ -39,7 +55,7 @@ class Projectile {
         this.vy += GRAVITY;
         this.x += this.vx;
         this.y += this.vy;
-        if (this.y > canvas.height) {
+        if (this.y > terrainHeight(this.x)) {
             this.active = false;
         }
     }
@@ -59,13 +75,22 @@ let currentTank = tank1;
 let projectile = null;
 
 function drawBackground() {
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height);
+    for (let x = 0; x < canvas.width; x++) {
+        ctx.lineTo(x, terrain[x]);
+    }
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.closePath();
     ctx.fillStyle = '#654321';
-    ctx.fillRect(0, canvas.height - 10, canvas.width, 10); // ground
+    ctx.fill();
 }
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
+    tank1.y = terrainHeight(tank1.x) - 20;
+    tank2.y = terrainHeight(tank2.x) - 20;
     tank1.draw();
     tank2.draw();
     if (projectile) {
@@ -79,6 +104,7 @@ function update() {
         if (!projectile.active) {
             projectile = null;
             currentTank = currentTank === tank1 ? tank2 : tank1;
+            angleControl.value = (currentTank.angle * 180 / Math.PI).toFixed(0);
         }
     }
 }
@@ -99,9 +125,11 @@ window.addEventListener('keydown', (e) => {
             break;
         case 'ArrowUp':
             currentTank.angle = Math.min(currentTank.angle + 0.05, Math.PI / 2);
+            angleControl.value = (currentTank.angle * 180 / Math.PI).toFixed(0);
             break;
         case 'ArrowDown':
             currentTank.angle = Math.max(currentTank.angle - 0.05, 0);
+            angleControl.value = (currentTank.angle * 180 / Math.PI).toFixed(0);
             break;
         case '+':
         case '=':
@@ -117,5 +145,10 @@ window.addEventListener('keydown', (e) => {
             break;
     }
 });
+
+angleControl.addEventListener('input', () => {
+    currentTank.angle = angleControl.value * Math.PI / 180;
+});
+
 
 gameLoop();

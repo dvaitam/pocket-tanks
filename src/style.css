@@ -13,3 +13,11 @@ canvas {
     border: 2px solid #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
+#controls {
+    text-align: center;
+    padding: 10px;
+}
+
+#angleControl {
+    width: 200px;
+}
