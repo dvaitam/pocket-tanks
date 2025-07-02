@@ -13,6 +13,7 @@ canvas {
     border: 2px solid #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
+
 #controls {
     text-align: center;
     padding: 10px;
@@ -20,4 +21,9 @@ canvas {
 
 #angleControl {
     width: 200px;
+}
+
+#powerControl {
+    width: 200px;
+    margin-left: 10px;
 }

@@ -13,7 +13,6 @@ python3 server.py
 ### Controls
 
 - Move tank: Arrow Left/Right
-- Adjust angle: Arrow Up/Down or the angle slider
-- Change power: `+`/`-`
+- Adjust angle: Arrow Up/Down or the angle slider (0-180°)
+- Change power: `+`/`-` or the power slider
 - Fire: Space bar
-

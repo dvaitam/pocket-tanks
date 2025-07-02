@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 
 const GRAVITY = 0.25;
 const angleControl = document.getElementById('angleControl');
+const powerControl = document.getElementById('powerControl');
+
 
 // generate random terrain
 const terrain = new Array(canvas.width);
@@ -18,24 +20,28 @@ function terrainHeight(x) {
     return terrain[x];
 }
 
-
 class Tank {
-    constructor(x, color) {
+    constructor(x, color, facingLeft = false) {
         this.x = x;
         this.y = terrainHeight(x) - 20;
         this.angle = Math.PI / 4;
         this.power = 15;
         this.color = color;
+        this.facingLeft = facingLeft;
+    }
+
+    getGlobalAngle() {
+        return this.facingLeft ? Math.PI - this.angle : this.angle;
     }
 
     draw() {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.fillStyle = this.color;
-        ctx.fillRect(-15, -10, 30, 10); // body
-        ctx.fillRect(-20, -20, 40, 10); // base
-        ctx.rotate(-this.angle);
-        ctx.fillRect(0, -4, 20, 4); // barrel
+        ctx.fillRect(-10, -8, 20, 8); // body
+        ctx.fillRect(-15, -16, 30, 8); // base
+        ctx.rotate(-this.getGlobalAngle());
+        ctx.fillRect(0, -3, 30, 3); // barrel
         ctx.restore();
     }
 }
@@ -70,7 +76,7 @@ class Projectile {
 }
 
 const tank1 = new Tank(100, '#ff6161');
-const tank2 = new Tank(canvas.width - 100, '#61ff61');
+const tank2 = new Tank(canvas.width - 100, '#61ff61', true);
 let currentTank = tank1;
 let projectile = null;
 
@@ -105,6 +111,7 @@ function update() {
             projectile = null;
             currentTank = currentTank === tank1 ? tank2 : tank1;
             angleControl.value = (currentTank.angle * 180 / Math.PI).toFixed(0);
+            powerControl.value = currentTank.power;
         }
     }
 }
@@ -124,7 +131,7 @@ window.addEventListener('keydown', (e) => {
             currentTank.x += 5;
             break;
         case 'ArrowUp':
-            currentTank.angle = Math.min(currentTank.angle + 0.05, Math.PI / 2);
+            currentTank.angle = Math.min(currentTank.angle + 0.05, Math.PI);
             angleControl.value = (currentTank.angle * 180 / Math.PI).toFixed(0);
             break;
         case 'ArrowDown':
@@ -134,13 +141,15 @@ window.addEventListener('keydown', (e) => {
         case '+':
         case '=':
             currentTank.power = Math.min(currentTank.power + 1, 20);
+            powerControl.value = currentTank.power;
             break;
         case '-':
             currentTank.power = Math.max(currentTank.power - 1, 5);
+            powerControl.value = currentTank.power;
             break;
         case ' ':
             if (!projectile) {
-                projectile = new Projectile(currentTank.x, currentTank.y - 20, currentTank.angle, currentTank.power, currentTank.color);
+                projectile = new Projectile(currentTank.x, currentTank.y - 20, currentTank.getGlobalAngle(), currentTank.power, currentTank.color);
             }
             break;
     }
@@ -150,5 +159,7 @@ angleControl.addEventListener('input', () => {
     currentTank.angle = angleControl.value * Math.PI / 180;
 });
 
-
+powerControl.addEventListener('input', () => {
+    currentTank.power = parseInt(powerControl.value, 10);
+});
 gameLoop();
