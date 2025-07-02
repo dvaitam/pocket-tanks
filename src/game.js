@@ -5,6 +5,7 @@ const GRAVITY = 0.25;
 const angleControl = document.getElementById('angleControl');
 const powerControl = document.getElementById('powerControl');
 
+
 // generate random terrain
 const terrain = new Array(canvas.width);
 let h = canvas.height - 50;
@@ -161,5 +162,4 @@ angleControl.addEventListener('input', () => {
 powerControl.addEventListener('input', () => {
     currentTank.power = parseInt(powerControl.value, 10);
 });
-
 gameLoop();
