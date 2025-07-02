@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    background: linear-gradient(#2b1055, #7597de);
+    color: #fff;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    background: radial-gradient(circle at center, #71b7e6, #2980b9);
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#controls {
+    text-align: center;
+    padding: 10px;
+}
+
+#angleControl {
+    width: 200px;
+}
