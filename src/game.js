@@ -4,6 +4,15 @@ const ctx = canvas.getContext('2d');
 const GRAVITY = 0.25;
 const angleControl = document.getElementById('angleControl');
 const powerControl = document.getElementById('powerControl');
+const score1El = document.getElementById('score1');
+const score2El = document.getElementById('score2');
+let score1 = 0;
+let score2 = 0;
+
+function updateScoreboard() {
+    score1El.textContent = score1;
+    score2El.textContent = score2;
+}
 
 
 // generate random terrain
@@ -33,6 +42,12 @@ class Tank {
     getGlobalAngle() {
         return this.facingLeft ? Math.PI - this.angle : this.angle;
     }
+
+    contains(px, py) {
+        return px >= this.x - 15 && px <= this.x + 15 &&
+               py >= this.y - 16 && py <= this.y;
+    }
+
 
     draw() {
         ctx.save();
@@ -107,7 +122,20 @@ function draw() {
 function update() {
     if (projectile) {
         projectile.update();
-        if (!projectile.active) {
+        const target = currentTank === tank1 ? tank2 : tank1;
+        if (target.contains(projectile.x, projectile.y)) {
+            projectile.active = false;
+            projectile = null;
+            if (currentTank === tank1) {
+                score1++;
+            } else {
+                score2++;
+            }
+            updateScoreboard();
+            currentTank = target;
+            angleControl.value = (currentTank.angle * 180 / Math.PI).toFixed(0);
+            powerControl.value = currentTank.power;
+        } else if (!projectile.active) {
             projectile = null;
             currentTank = currentTank === tank1 ? tank2 : tank1;
             angleControl.value = (currentTank.angle * 180 / Math.PI).toFixed(0);
@@ -162,4 +190,7 @@ angleControl.addEventListener('input', () => {
 powerControl.addEventListener('input', () => {
     currentTank.power = parseInt(powerControl.value, 10);
 });
+
+updateScoreboard();
+
 gameLoop();

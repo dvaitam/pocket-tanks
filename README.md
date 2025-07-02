@@ -16,3 +16,7 @@ python3 server.py
 - Adjust angle: Arrow Up/Down or the angle slider (0-180°)
 - Change power: `+`/`-` or the power slider
 - Fire: Space bar
+
+Scoring is displayed above the canvas. Each time a projectile hits the
+opposing tank, the firing player earns a point.
+
