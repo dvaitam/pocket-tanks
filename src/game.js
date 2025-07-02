@@ -18,6 +18,7 @@ function terrainHeight(x) {
     return terrain[x];
 }
 
+
 class Tank {
     constructor(x, color) {
         this.x = x;
@@ -148,5 +149,6 @@ window.addEventListener('keydown', (e) => {
 angleControl.addEventListener('input', () => {
     currentTank.angle = angleControl.value * Math.PI / 180;
 });
+
 
 gameLoop();

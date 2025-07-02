@@ -16,3 +16,4 @@ python3 server.py
 - Adjust angle: Arrow Up/Down or the angle slider
 - Change power: `+`/`-`
 - Fire: Space bar
+
